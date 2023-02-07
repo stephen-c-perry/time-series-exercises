@@ -3,7 +3,10 @@ import pandas as pd
 
 
 def get_star_wars_all(base_url): 
-
+    '''
+    This is a function that takes in an api base url and returns all pages in 
+    a single dataframe
+    '''
     for i in range(1,10):
     
         response = requests.get(base_url) 
