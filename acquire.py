@@ -2,27 +2,61 @@ import requests
 import pandas as pd
 
 
-def get_star_wars_all(base_url): 
-    '''
-    This is a function that takes in an api base url and returns all pages in 
-    a single dataframe
-    '''
-    for i in range(1,10):
+def star_wars_people():
+ 
+    url = 'https://swapi.dev/api/people'
+    response = requests.get(url)
+    data = response.json()
+    people = pd.DataFrame(data['results'])
     
-        response = requests.get(base_url) 
+    while data['next'] != None:
+        response = requests.get(data['next'])
         data = response.json()
-        df = pd.DataFrame(data['results'])
-        next_page = data['next']
+        people = pd.concat([people,
+                               pd.DataFrame(data['results'])],
+                              ignore_index=True)
     
-        while next_page is not None:
+    return people
+
+
+
+
+def star_wars_planets():
+ 
+    url = 'https://swapi.dev/api/planets'
+    response = requests.get(url)
+    data = response.json()
+    planets = pd.DataFrame(data['results'])
     
-            new_url = base_url + f'{i}/'
-            response_i = requests.get(new_url)
-            data_i = response_i.json()
+    while data['next'] != None:
+        response = requests.get(data['next'])
+        data = response.json()
+        planets = pd.concat([planets,
+                               pd.DataFrame(data['results'])],
+                              ignore_index=True)
+    
+    return planets
 
-            #put new data into new df and concat with og df
-            df_i = pd.DataFrame(data_i['results'])
-            df = pd.concat([df, df_i], axis = 0)
 
-            if next_page is None:
-                break
+
+def star_wars_starships():
+ 
+    url = 'https://swapi.dev/api/starships'
+    response = requests.get(url)
+    data = response.json()
+    starships = pd.DataFrame(data['results'])
+    
+    while data['next'] != None:
+        response = requests.get(data['next'])
+        data = response.json()
+        starships = pd.concat([starships,
+                               pd.DataFrame(data['results'])],
+                              ignore_index=True)
+    
+    return starships
+
+
+
+def get_all_star_wars():
+    csv = pd.read_csv('all_star_wars.csv')
+    return csv
