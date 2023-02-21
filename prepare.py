@@ -18,4 +18,18 @@ def get_prep_store():
     return df
 
 
+def get_prep_OPS():
+    
+    df = pd.read_csv('opsd_germany_daily.csv')
+    variables = ['Consumption','Wind', 'Solar', 'Wind+Solar']
+    df[variables].plot()
+    df.set_index('Date').sort_index()
+    df.index = pd.to_datetime(df.index)
+    df['month'] = df.index.month_name()
+    df['year'] = df.index.year
+
+
+    return df
+
+
 
